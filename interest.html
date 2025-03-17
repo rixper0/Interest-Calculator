@@ -1,0 +1,35 @@
+<html>
+    <script>
+
+        let timeout;
+        function debounce(){
+            clearInterval(timeout);
+            timeout = setTimeout(() => {
+                interest()
+            },1000);
+        }
+
+
+        async function interest(){
+            const a = document.getElementById("Principle").value
+            const b = document.getElementById("rate").value
+            const c = document.getElementById("time").value
+
+            console.log("Sending values:", { a, b, c });
+
+            const element = await fetch(`http://localhost:8080/interest?Principle=${a}&Rate=${b}&time=${c}`);
+            console.log(element)
+            const response = await element.json();
+            console.log(response)
+            document.getElementById("FinalInterest").innerHTML = `Interest: ${response.interest}, Total: ${response.total}`;
+
+
+        }
+    </script>
+    <body>
+        <input oninput="debounce()" id="Principle" type="text" placeholder="Principle Amount"></input> <br><br>
+        <input oninput="debounce()" id="rate" type="text" placeholder="Rate of Interest"></input> <br><br>
+        <input oninput="debounce()" id="time" type="text" placeholder="Time Period"></input> <br><br>
+        <div id="FinalInterest"></div>
+    </body>
+</html>
